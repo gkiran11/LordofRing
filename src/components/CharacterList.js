@@ -12,6 +12,18 @@ const CharacterList = ({ characters }) => {
 
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
+  const next = () => {
+    if (currentPage < numPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   const openCharacterDetails = (character) => {
     setSelectedCharacter(character);
   };
@@ -51,7 +63,7 @@ const CharacterList = ({ characters }) => {
       );
   };
 
-  const numPages = Math.ceil(filteredCharacters.length / perPage);
+  const numPages = Math.ceil(filteredCharacters().length / perPage);
 
   const indexOfLastCharacter = currentPage * perPage;
   const indexOfFirstCharacter = indexOfLastCharacter - perPage;
@@ -171,22 +183,36 @@ const CharacterList = ({ characters }) => {
 
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-2">
-          <ul className="mt-4 flex">
-            {pageNumbers.map((number) => (
-              <li key={number} className="inline-block mx-2">
+          <div className="flex items-center gap-8">
+            <ul className="mt-4 flex">
+              <li>
                 <button
                   className={`px-3 py-1 rounded ${
-                    currentPage === number
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-blue-500 border border-blue-500"
+                    currentPage === 1
+                      ? "bg-white text-gray-500 border border-gray-500"
+                      : "bg-blue-500 text-white"
                   }`}
-                  onClick={() => setCurrentPage(number)}
+                  onClick={prev}
+                  disabled={currentPage === 1}
                 >
-                  {number}
+                  Previous
                 </button>
               </li>
-            ))}
-          </ul>
+              <li>
+                <button
+                  className={`px-3 py-1 rounded ${
+                    currentPage === numPages
+                      ? "bg-white text-gray-500 border border-gray-500"
+                      : "bg-blue-500 text-white"
+                  }`}
+                  onClick={next}
+                  disabled={currentPage === numPages}
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
         <div className="flex items-center space-x-4">
           <label htmlFor="perPage" className="text-gray-600 text-sm">
